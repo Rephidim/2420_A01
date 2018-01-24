@@ -24,10 +24,10 @@ public class Percolation {
 			this.a[i] = 1;
 		}
 		if (this.a[i] == 1 && this.a[i-1] == 1) {
-			uf.union(a[i],a[i-1]);
+			uf.union(i,(i-1));
 		}
 		if (this.a[i] == 1 && this.a[i+1] == 1) {
-			uf.union(a[i], a[i-1]);
+			uf.union(i, (i+1));
 		}
 	}
 	
@@ -53,11 +53,7 @@ public class Percolation {
 	
 	public boolean percolates() {
 		//TODO does the system percolate?
-		return uf.connected(a[0], a[a.length-1]);
-	}
-	
-	private void getList() {
-		System.out.println(Arrays.toString(this.a));
+		return uf.connected(0, a.length - 1);
 	}
 	
 	/**
@@ -66,11 +62,12 @@ public class Percolation {
 	 */
 	public static void main(String[] args) {
 		Percolation p = new Percolation(4);
-		System.out.println("Percolation Array");
-		p.getList();
-		System.out.println(uf.count());
-		System.out.println("is 0 connected to 5 ... should be false");
-		System.out.println(uf.connected(p.a[0], p.a[5]));
-		//TODO returns true
+		System.out.println(p.percolates()); // Should be false
+		p.open(1);
+		p.open(2);
+		System.out.println(p.percolates()); // Should be false
+		p.open(3);
+		p.open(4);
+		System.out.println(p.percolates()); // Should be true
 	}
 }
