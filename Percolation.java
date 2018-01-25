@@ -1,6 +1,13 @@
 import java.util.Arrays;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+/*
+ * TODO side-to-side open() works to open individual sits in 
+ * grid of specified size, plus extra entry at start + end.
+ * Side-to-side filling works properly.
+ * Top-Bottom filling not yet implemented.
+ */
+
 public class Percolation {
 	private int[] a;
 	private static WeightedQuickUnionUF uf;
@@ -25,18 +32,12 @@ public class Percolation {
 		if (a[xyConv(i,j)] == 0) {
 			a[xyConv(i,j)] = 1;
 		}
-//		if (a[xyConv(i+1,j)] == 1) {
-//			uf.union(a[xyConv(i,j)],a[xyConv(i+1,j)]);
-//		}
-//		if (a[xyConv(i-1,j)] == 1) {
-//			uf.union(a[xyConv(i,j)],a[xyConv(i-1,j)]);
-//		}
-//		if (a[xyConv(i,j+1)] == 1) {
-//			uf.union(a[xyConv(i,j)],a[xyConv(i,j+1)]);
-//		}
-//		if (a[xyConv(i,j-1)] == 1) {
-//			uf.union(a[xyConv(i,j)],a[xyConv(i,j-1)]);
-//		}
+		if (a[xyConv(i,j)] == 1 && a[xyConv(i-1,j)] == 1) {
+			uf.union(xyConv(i,j), xyConv(i-1,j));
+		}
+		if (a[xyConv(i,j)] == 1 && a[xyConv(i+1,j)] == 1) {
+			uf.union(xyConv(i,j), xyConv(i+1,j));
+		}
 	}
 	
 	/**
@@ -47,12 +48,12 @@ public class Percolation {
 	public boolean isOpen(int i, int j) {
 		if (a[xyConv(i,j)] == 1) {
 			return true;
-		} else return false;
+		} return false;
 	}
 	
 	public boolean isFull(int i, int j) {
 		//TODO is site (i) full?
-		if (uf.connected(a[xyConv(i,j)],a[0])) {
+		if (uf.connected(xyConv(i,j),0)) {
 			return true;
 		}
 		return false;
@@ -63,8 +64,7 @@ public class Percolation {
 	}
 	
 	private int xyConv(int i, int j) {
-		int x = (i+1) + (this.w * j);
-		return x;
+		return (i+1) + (this.w * j);
 	}
 	
 	/**
@@ -73,29 +73,5 @@ public class Percolation {
 	 */
 	public static void main(String[] args) {
 		Percolation p = new Percolation(3);
-		p.open(1, 1);
-		p.open(0, 0);
-		p.open(2, 2);
-		for (int i = 1; i < 4; i++) {
-			System.out.print(p.a[i]);
-		}
-		System.out.println();
-		for (int i = 4; i < 7; i++) {
-			System.out.print(p.a[i]);
-		}
-		System.out.println();
-		for (int i = 7; i < 10; i++) {
-			System.out.print(p.a[i]);
-		}
-		System.out.println();
-		System.out.println("isOpen(0,0) " + p.isOpen(0, 0));
-		System.out.println("isOpen(1,0) " + p.isOpen(1, 0));
-		System.out.println("isOpen(2,0) " + p.isOpen(2, 0));
-		System.out.println("isOpen(0,1) " + p.isOpen(0, 1));
-		System.out.println("isOpen(1,1) " + p.isOpen(1, 1));
-		System.out.println("isOpen(2,1) " + p.isOpen(2,1));
-		System.out.println("isOpen(0,2) " + p.isOpen(0, 2));
-		System.out.println("isOpen(1,2) " + p.isOpen(1, 2));
-		System.out.println("isOpen(2,2) " + p.isOpen(2, 2));
 	}
 }
