@@ -31,6 +31,9 @@ public class Percolation {
 		if (a[xyConv(i,j)] == 0) {
 			a[xyConv(i,j)] = 1;
 		}
+		if (j == 0 && a[xyConv(i,j)] == 1) {
+			uf.union(0, xyConv(i,j));
+		}
 		if (a[xyConv(i,j)] == 1 && a[xyConv(i-1,j)] == 1) {
 			uf.union(xyConv(i,j),xyConv(i-1,j));
 		}	
@@ -41,16 +44,17 @@ public class Percolation {
 			if (a[xyConv(i,j)] == 1 && a[xyConv(i,j+1)] == 1) {
 				uf.union(xyConv(i,j),xyConv(i,j+1));
 			}
-		} catch (IndexOutOfBoundsException e) {
-			
-		}
+		} catch (IndexOutOfBoundsException e) {}
 		try {
 			if (a[xyConv(i,j)] == 1 && a[xyConv(i,j-1)] == 1) {
 				uf.union(xyConv(i,j),xyConv(i,j-1));
 			}
-		} catch (IndexOutOfBoundsException e) {
-			
-		}
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			if (j == this.w-1 && a[xyConv(i,j)] == 1) {
+				uf.union(xyConv(i,j),a.length-1);
+			}
+		} catch (IndexOutOfBoundsException e) {}
 	}
 	
 	/**
@@ -84,51 +88,62 @@ public class Percolation {
 	 * For testing purposes only.
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		Percolation p = new Percolation(3);
-		p.open(1, 0);
-		System.out.println(Arrays.toString(p.a));
-		System.out.println("IsOpen");
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
-		System.out.println("Is Full");
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
-		System.out.println("Percolates? " + p.percolates());
-		p.open(0, 0);
-		System.out.println(Arrays.toString(p.a));
-		System.out.println("IsOpen");
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
-		System.out.println("Is Full");
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
-		System.out.println("Percolates? " + p.percolates());
-		p.open(1, 2);
-		System.out.println(Arrays.toString(p.a));
-		System.out.println("IsOpen");
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
-		System.out.println("Is Full");
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
-		System.out.println("Percolates? " + p.percolates());
-		p.open(1, 1);
-		System.out.println(Arrays.toString(p.a));
-		System.out.println("IsOpen");
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
-		System.out.println("Is Full");
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
-		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
-		System.out.println("Percolates? " + p.percolates());
-	}
+//	public static void main(String[] args) {
+//		Percolation p = new Percolation(3);
+//		p.open(1, 1);
+//		System.out.println(Arrays.toString(p.a));
+//		System.out.println("IsOpen");
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
+//		System.out.println("Is Full");
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
+//		System.out.println("Percolates? " + p.percolates());
+//		p.open(1, 0);
+//		System.out.println(Arrays.toString(p.a));
+//		System.out.println("IsOpen");
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
+//		System.out.println("Is Full");
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
+//		System.out.println("Percolates? " + p.percolates());
+//		p.open(0, 1);
+//		System.out.println(Arrays.toString(p.a));
+//		System.out.println("IsOpen");
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
+//		System.out.println("Is Full");
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
+//		System.out.println("Percolates? " + p.percolates());
+//		p.open(2, 1);
+//		System.out.println(Arrays.toString(p.a));
+//		System.out.println("IsOpen");
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
+//		System.out.println("Is Full");
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
+//		System.out.println("Percolates? " + p.percolates());
+//		p.open(1, 2);
+//		System.out.println(Arrays.toString(p.a));
+//		System.out.println("IsOpen");
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 0),p.isOpen(1, 0),p.isOpen(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 1),p.isOpen(1, 1),p.isOpen(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isOpen(0, 2),p.isOpen(1, 2),p.isOpen(2, 2));
+//		System.out.println("Is Full");
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 0),p.isFull(1, 0),p.isFull(2, 0));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 1),p.isFull(1, 1),p.isFull(2, 1));
+//		System.out.printf("%b,%b,%b\n",p.isFull(0, 2),p.isFull(1, 2),p.isFull(2, 2));
+//		System.out.println("Percolates? " + p.percolates());
+//	}
 }
