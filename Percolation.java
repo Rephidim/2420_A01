@@ -26,44 +26,47 @@ public class Percolation {
 	
 	}
 	
+	
 	public void open (int i, int j) {
+		//open the space
 		grid[convertXY(i, j)] = true;
 		
-		if(j == 0) {
-			percTracker.union(0,convertXY(i,j));
-			isFullTracker.union(0,convertXY(i,j));
-		}
+		//if we are on the top row connect to the top and fill
+
 		
-		if(isOpen(i - 1, j)) {
-			percTracker.union(convertXY(i -1, j), convertXY(i, j));
-			if(isFull(i - 1, j)) {
-				isFullTracker.union(convertXY(i -1, j), convertXY(i, j));
+		
+		//open vertical
+		try {
+			if(grid[convertXY(i, j - 1)]) {
+				percTracker.union(convertXY(i, j), convertXY(i, j - 1));
+				isFullTracker.union(convertXY(i, j), convertXY(i, j - 1));
 			}
-		}
-		if(isOpen(i + 1, j)) {
-			percTracker.union(convertXY(i + 1, j), convertXY(i, j));
-			if(isFull(i + 1, j)) {
-				isFullTracker.union(convertXY(i + 1, j), convertXY(i, j));
-			}
+		}catch(ArrayIndexOutOfBoundsException e) {
+			percTracker.union(convertXY(i, j), 0);
+			isFullTracker.union(convertXY(i, j), 0);
 		}
 		try {
-			if(isOpen(i, j - 1)) {
-				percTracker.union(convertXY(i, j - 1), convertXY(i, j));
-				if(isFull(i, j - 1)) {
-					isFullTracker.union(convertXY(i, j - 1), convertXY(i, j));
-				}
+			if((grid[convertXY(i, j + 1)]) && (convertXY(i, j) % gridWidth != 0)){
+				percTracker.union(convertXY(i, j), convertXY(i, j + 1));
+				isFullTracker.union(convertXY(i, j), convertXY(i, j + 1));
 			}
-			
-			if(isOpen(i, j + 1)) {
-				percTracker.union(convertXY(i, j + 1), convertXY(i, j));
-				if(isFull(i, j + 1)) {
-					isFullTracker.union(convertXY(i, j + 1), convertXY(i, j));
-				}
-			}
-			
 		}catch(ArrayIndexOutOfBoundsException e) {
-			
+			percTracker.union(convertXY(i, j), grid.length - 1);
 		}
+		
+		
+		//open horizontal
+		if(grid[convertXY(i - 1, j)]) {
+			percTracker.union(convertXY(i, j), convertXY(i - 1, j));
+			isFullTracker.union(convertXY(i, j), convertXY(i - 1, j));
+			}
+		if((grid[convertXY(i + 1, j)]) && (convertXY(i, j) % gridWidth != 0)) {
+			percTracker.union(convertXY(i, j), convertXY(i + 1, j));
+			isFullTracker.union(convertXY(i, j), convertXY(i + 1, j));
+		}
+		
+		
+		//if we are connected to the top fill this space and all open adjacent spaces
 		
 	}
 	
@@ -81,7 +84,7 @@ public class Percolation {
 	
 	
 	public int convertXY(int x, int y) {
-		return (x+1)+  (y * this.gridWidth);
+		return (x)+  (y * this.gridWidth);
 				
 	}
 	
@@ -92,11 +95,20 @@ public class Percolation {
 	
 	
 	public void printGrid() {
-		for(int i =0; i < grid.length; i++) {
+		for(int i = 0; i < grid.length; i++) {
 			if(grid[i]) {
-				if(isFull(convertIndex(i)[0], convertIndex(i)[1]));
+				
+				if(isFull(convertIndex(i)[0], convertIndex(i)[1])) {
+					System.out.print("~ ");
+				}else {
+					System.out.print("O ");
+				}
+				
+				
+			}else {
+				System.out.print("X ");
 			}
-			if(i%gridWidth == 0) {
+			if(i % gridWidth == 0) {
 				System.out.println();
 			}
 		}
@@ -108,7 +120,7 @@ public class Percolation {
 		
 		Random rand = new Random();	
 		
-		for (int i = 0; i < 51; i++) {
+		for (int i = 0; i <= 52; i++) {
 			
 			int randomX = rand.nextInt(gridWidth);
 			int randomY = rand.nextInt(gridWidth);
@@ -119,9 +131,8 @@ public class Percolation {
 			}else {
 				//open the index
 				p.open(randomX, randomY);
-					}
-					
-				}
+					}	
+		}
 		
 		
 		p.printGrid();
