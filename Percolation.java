@@ -27,14 +27,19 @@ public class Percolation {
 	
 	public void open (int i, int j) {
 		int node = convertXY(i,j);
+		int nodeDown = convertXY(i, j + 1);
+		int nodeUp = convertXY(i, j - 1);
+		int nodeLeft = convertXY(i - 1, j);
+		int nodeRight = convertXY(i + 1, j);
 		//open the space
 		grid[node] = true;
 		
 		//open vertical
 		try {
-			if(grid[convertXY(i, j - 1)]) {
-				percTracker.union(node, convertXY(i, j - 1));
-				isFullTracker.union(node, convertXY(i, j - 1));
+			
+			if(grid[nodeUp]) {
+				percTracker.union(node, nodeUp);
+				isFullTracker.union(node, nodeUp);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
 			// If y-1 is out of bounds, union to arbitrary top
@@ -42,9 +47,10 @@ public class Percolation {
 			isFullTracker.union(node, 0);
 		}
 		try {
-			if((grid[convertXY(i, j + 1)])){
-				percTracker.union(node, convertXY(i, j + 1));
-				isFullTracker.union(node, convertXY(i, j + 1));
+			
+			if((grid[nodeDown])){
+				percTracker.union(node, nodeDown);
+				isFullTracker.union(node, nodeDown);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
 			// If y+1 is out of bounds, union to arbitrary bottom.
@@ -53,13 +59,15 @@ public class Percolation {
 		
 		
 		//open horizontal
-		if(grid[convertXY(i - 1, j)]){
-			percTracker.union(node, convertXY(i - 1, j));
-			isFullTracker.union(node, convertXY(i - 1, j));
+		
+		if(grid[nodeLeft] && !(i % gridWidth == 1)){
+			percTracker.union(node, nodeLeft);
+			isFullTracker.union(node, nodeLeft);
 			}
-		if((grid[convertXY(i + 1, j)])) {
-			percTracker.union(node, convertXY(i + 1, j));
-			isFullTracker.union(node, convertXY(i + 1, j));
+		
+		if(grid[nodeRight] && !(i % gridWidth == 0)) {
+			percTracker.union(node, nodeRight);
+			isFullTracker.union(node, nodeRight);
 		}
 		
 		
@@ -129,7 +137,6 @@ public class Percolation {
 		
 		p.printGrid();
 		System.out.println("Percolates: " + p.percolates());
-		
 	}
 
 }
