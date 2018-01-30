@@ -46,7 +46,7 @@ public class Percolation {
 			isFullTracker.union(convertXY(i, j), 0);
 		}
 		try {
-			if((grid[convertXY(i, j + 1)]) && (convertXY(i, j) % gridWidth != 0)){
+			if((grid[convertXY(i, j + 1)])){
 				percTracker.union(convertXY(i, j), convertXY(i, j + 1));
 				isFullTracker.union(convertXY(i, j), convertXY(i, j + 1));
 			}
@@ -56,17 +56,16 @@ public class Percolation {
 		
 		
 		//open horizontal
-		if(grid[convertXY(i - 1, j)]) {
+		if(grid[convertXY(i - 1, j)] && convertXY(i, j) % gridWidth == 1){
 			percTracker.union(convertXY(i, j), convertXY(i - 1, j));
 			isFullTracker.union(convertXY(i, j), convertXY(i - 1, j));
 			}
-		if((grid[convertXY(i + 1, j)]) && (convertXY(i, j) % gridWidth != 0)) {
+		if((grid[convertXY(i + 1, j)]) && convertXY(i, j) % gridWidth == 1) {
 			percTracker.union(convertXY(i, j), convertXY(i + 1, j));
 			isFullTracker.union(convertXY(i, j), convertXY(i + 1, j));
 		}
 		
 		
-		//if we are connected to the top fill this space and all open adjacent spaces
 		
 	}
 	
@@ -133,6 +132,14 @@ public class Percolation {
 				p.open(randomX, randomY);
 					}	
 		}
+		
+		
+//		PercolationStats ps = new PercolationStats(200, 100);
+//		
+//		System.out.println("mean: " + ps.mean());
+//		System.out.println("stdDev: " + ps.stdDev());
+//		System.out.println("low: " + ps.confidenceLow());
+//		System.out.println("high: " + ps.confidenceHigh());
 		
 		
 		p.printGrid();

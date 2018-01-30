@@ -27,8 +27,8 @@ public class PercolationStats {
 		
 		//perform T experiments opening a space at random until the system percolates
 		for (int i = 0; i < T; i++) {
-			openCounter = 0;
 			
+			int openCounter = 0;
 			
 			while(!p.percolates()) {
 				
@@ -37,17 +37,18 @@ public class PercolationStats {
 				
 				//if the chosen index is already open choose a different one.
 				if(p.isOpen(randomX, randomY)) {
-					i--;
+					
 				}else {
 					//open the index
 					p.open(randomX, randomY);
 					openCounter++;
 				}
 			
-			openPerPerc[i] = openCounter;
-				
 			}	
+			openPerPerc[i] = openCounter;
+			
 		}
+		
 	}
 	
 	public double mean() {
@@ -56,7 +57,7 @@ public class PercolationStats {
 			sum += n;
 		}
 		
-		return sum / openPerPerc.length;
+		return (sum / openPerPerc.length);
 	}
 	
 	public double stdDev() {
@@ -66,15 +67,15 @@ public class PercolationStats {
 			sumOfDevs += ((n - mean()) * (n - mean()));
 		}
 		
-		return Math.sqrt(sumOfDevs / (expNum -1));
+		return (Math.sqrt(sumOfDevs / (expNum -1)));
 	}
 	
 	public double confidenceLow() {
-		return mean() - ((1.96 * stdDev()) / Math.sqrt(expNum));
+		return (mean() - ((1.96 * stdDev()) / Math.sqrt(expNum)));
 	}
 	
 	public double confidenceHigh() {
-		return mean() + ((1.96 * stdDev()) / Math.sqrt(expNum));
+		return (mean() + ((1.96 * stdDev()) / Math.sqrt(expNum)));
 	}
 
 
