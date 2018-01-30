@@ -1,13 +1,11 @@
-import java.util.Arrays;
 import java.util.Random;
-
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 	
 	private static boolean[] grid;
 	private static WeightedQuickUnionUF percTracker, isFullTracker;
-	static int gridWidth;
+	private static int gridWidth;
 	
 	
 	public Percolation(int n) {
@@ -28,43 +26,41 @@ public class Percolation {
 	
 	
 	public void open (int i, int j) {
+		int node = convertXY(i,j);
 		//open the space
-		grid[convertXY(i, j)] = true;
-		
-		//if we are on the top row connect to the top and fill
-
-		
+		grid[node] = true;
 		
 		//open vertical
 		try {
 			if(grid[convertXY(i, j - 1)]) {
-				percTracker.union(convertXY(i, j), convertXY(i, j - 1));
-				isFullTracker.union(convertXY(i, j), convertXY(i, j - 1));
+				percTracker.union(node, convertXY(i, j - 1));
+				isFullTracker.union(node, convertXY(i, j - 1));
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			percTracker.union(convertXY(i, j), 0);
-			isFullTracker.union(convertXY(i, j), 0);
+			// If y-1 is out of bounds, union to arbitrary top
+			percTracker.union(node, 0);
+			isFullTracker.union(node, 0);
 		}
 		try {
 			if((grid[convertXY(i, j + 1)])){
-				percTracker.union(convertXY(i, j), convertXY(i, j + 1));
-				isFullTracker.union(convertXY(i, j), convertXY(i, j + 1));
+				percTracker.union(node, convertXY(i, j + 1));
+				isFullTracker.union(node, convertXY(i, j + 1));
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			percTracker.union(convertXY(i, j), grid.length - 1);
+			// If y+1 is out of bounds, union to arbitrary bottom.
+			percTracker.union(node, grid.length - 1);
 		}
 		
 		
 		//open horizontal
-		if(grid[convertXY(i - 1, j)] && convertXY(i, j) % gridWidth == 1){
-			percTracker.union(convertXY(i, j), convertXY(i - 1, j));
-			isFullTracker.union(convertXY(i, j), convertXY(i - 1, j));
+		if(grid[convertXY(i - 1, j)]){
+			percTracker.union(node, convertXY(i - 1, j));
+			isFullTracker.union(node, convertXY(i - 1, j));
 			}
-		if((grid[convertXY(i + 1, j)]) && convertXY(i, j) % gridWidth == 1) {
-			percTracker.union(convertXY(i, j), convertXY(i + 1, j));
-			isFullTracker.union(convertXY(i, j), convertXY(i + 1, j));
+		if((grid[convertXY(i + 1, j)])) {
+			percTracker.union(node, convertXY(i + 1, j));
+			isFullTracker.union(node, convertXY(i + 1, j));
 		}
-		
 		
 		
 	}
@@ -83,7 +79,7 @@ public class Percolation {
 	
 	
 	public int convertXY(int x, int y) {
-		return (x)+  (y * this.gridWidth);
+		return (x)+  (y * Percolation.gridWidth);
 				
 	}
 	
@@ -94,7 +90,7 @@ public class Percolation {
 	
 	
 	public void printGrid() {
-		for(int i = 0; i < grid.length; i++) {
+		for(int i = 1; i < grid.length-1; i++) {
 			if(grid[i]) {
 				
 				if(isFull(convertIndex(i)[0], convertIndex(i)[1])) {
@@ -102,8 +98,6 @@ public class Percolation {
 				}else {
 					System.out.print("O ");
 				}
-				
-				
 			}else {
 				System.out.print("X ");
 			}
@@ -133,21 +127,9 @@ public class Percolation {
 					}	
 		}
 		
-		
-//		PercolationStats ps = new PercolationStats(200, 100);
-//		
-//		System.out.println("mean: " + ps.mean());
-//		System.out.println("stdDev: " + ps.stdDev());
-//		System.out.println("low: " + ps.confidenceLow());
-//		System.out.println("high: " + ps.confidenceHigh());
-		
-		
 		p.printGrid();
+		System.out.println("Percolates: " + p.percolates());
 		
 	}
 
 }
-
-
-
-
